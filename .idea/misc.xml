@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Black">
+    <option name="sdkName" value="Python 3.9 (CXR-XAI)" />
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="Remote Python 3.11.9 (sftp://junsupark0213@192.168.44.110:24/home/junsupark0213/.virtualenvs/CXR-XAI/bin/python)" project-jdk-type="Python SDK" />
+</project>
