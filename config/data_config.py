@@ -12,8 +12,7 @@ class Covid19RadiographyDataConfig:
     """
     def __init__(
             self,
-            data_path=r'/home/wlsdud022/autogluon_data/JS_DATASET/COVID/COVID-19_Radiography_Dataset',
-            # local data path: r'D:/COVID/COVID-19_Radiography_Dataset' || server data path: r'/home/wlsdud022/autogluon_data/JS_DATASET/COVID/COVID-19_Radiography_Dataset'
+            data_path='/mnt/nasw337n2/junsu_work/DATASET/COVID-CXR/COVID-19_Radiography_Dataset',
             label_list=None,
             label_map=None,
             data_select='segmented_images',
@@ -64,7 +63,6 @@ class CovidQuExDataConfig:
     def __init__(
             self,
             data_path=r'/home/wlsdud022/autogluon_data/JS_DATASET/COVID/COVID-QU-Ex_Dataset',
-            # local data path: r'D:/COVID/COVID-QU-Ex_Dataset' || server data path: r'/home/wlsdud022/autogluon_data/JS_DATASET/COVID/COVID-QU-Ex_Dataset'
             label_list=None,
             label_map=None,
             data_select='segmented_images',
@@ -78,7 +76,7 @@ class CovidQuExDataConfig:
         if label_map is None:
             label_map = {0: 'Normal', 1: 'COVID', 2: 'Non_Covid_Pneumonia'}
         if image_filtering is True:
-            filter_config = {'method': 'HE', 'kernel_size': 5, 'sigma': 1}
+            filter_config = {'method': 'CLAHE', 'kernel_size': 5, 'sigma': 1}
         '''
         Filtering Method Abbreviations
 

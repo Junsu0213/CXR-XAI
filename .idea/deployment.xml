@@ -1,25 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="junsupark0213@192.168.44.110:24 password" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="junsupark0213@10.0.10.137:1423 password (5)" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
-      <paths name="junsupark0213@192.168.44.110:24 password">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/home/junsupark0213/PycharmProjects/CXR-XAI" local="$PROJECT_DIR$" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="junsupark0213@192.168.44.110:24 password (2)">
+      <paths name="junsupark0213@10.0.10.137:1423 password">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="junsupark0213@192.168.44.110:24 password (3)">
+      <paths name="junsupark0213@10.0.10.137:1423 password (2)">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="junsupark0213@10.0.10.137:1423 password (3)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="junsupark0213@10.0.10.137:1423 password (4)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="junsupark0213@10.0.10.137:1423 password (5)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/mnt/nasw337n2/junsu_work/PycharmProjects/CXR-XAI" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
