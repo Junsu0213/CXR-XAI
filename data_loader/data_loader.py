@@ -1,3 +1,8 @@
+# -*- coding:utf-8 -*-
+"""
+Created on Wed. Aug. 28 14:59:21 2024
+@author: JUN-SU PARK
+"""
 import os
 import glob
 import numpy as np
