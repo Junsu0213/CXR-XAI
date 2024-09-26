@@ -88,11 +88,9 @@ class ModelTrainer:
 
             if epoch % 10 == 0:
                 print(
-                    f'Epoch: {epoch}, '
-                    f'Train Accuracy: {train_acc:.4f}, '
-                    f'Train Loss: {train_loss:.4f}, '
-                    f'Validation Accuracy: {val_acc:.4f}, '
-                    f'Validation Loss: {val_loss:.4f}'
+                    f'Epoch: {epoch}\n'
+                    f'Train Accuracy: {train_acc:.4f}, Train Loss: {train_loss:.4f}\n'
+                    f'Validation Accuracy: {val_acc:.4f}, Validation Loss: {val_loss:.4f}'
                 )
                 print('############################################################################')
 
