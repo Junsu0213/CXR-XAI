@@ -24,7 +24,7 @@ class CAM(nn.Module):
         super(CAM, self).__init__()
         self.channels = channels
         self.r = r
-        self.linear_max = nn.Sequential(
+        self.linear = nn.Sequential(
             nn.Linear(in_features=self.channels, out_features=self.channels//self.r, bias=True),
             nn.ReLU(inplace=True),
             nn.Linear(in_features=self.channels//self.r, out_features=self.channels, bias=True))

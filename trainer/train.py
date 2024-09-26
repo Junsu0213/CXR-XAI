@@ -37,22 +37,24 @@ class ModelTrainer:
             dataset_size = len(full_dataset)
             train_size = int(0.8*dataset_size)
             val_size = dataset_size - train_size
-            train_dataset, val_dataset = torch.utils.data.random_split(train_loader, [train_size, val_size])
+            train_dataset, val_dataset = torch.utils.data.random_split(full_dataset, [train_size, val_size])
             train_loader = DataLoader(train_dataset, batch_size=self.model_config.batch_size, shuffle=True)
             val_loader = DataLoader(val_dataset, batch_size=self.model_config.batch_size, shuffle=True)
 
-        metric = torchmetrics.Accuracy(task='multiclass', num_classes=self.model_config.num_classes).to(self.model_config.device)
+        metric = torchmetrics.Accuracy(task='multiclass', num_classes=self.model_config.num_classes).to(
+            self.model_config.device)
 
         loss_list = []
         early_stop_counter = 0
 
-        for epoch in range(self.model_config.epochs):
+        for epoch in range(1, self.model_config.epochs + 1):
             self.model.train()
             train_loss = 0
             train_acc = 0
             for x, y in train_loader:
                 x = x.to(self.model_config.device)
                 y = y.to(self.model_config.device)
+                self.optimizer.zero_grad()  # 그래디언트 초기화
                 pred = self.model(x)
                 loss = self.criterion(pred, y)
                 loss.backward()
@@ -63,48 +65,53 @@ class ModelTrainer:
                 train_loss += loss.item()
                 train_acc += acc
 
-                if epoch % 10 == 0:
-                    print(
-                        f'Epoch: {epoch}, '
-                        f'Train Accuracy: {train_acc / len(train_loader): .4f},'
-                        f'Train Loss: {train_loss / len(train_loader):.4f}'
-                    )
+            train_loss /= len(train_loader)
+            train_acc /= len(train_loader)
 
-                self.model.eval()
-                with torch.no_grad():
-                    val_loss = 0
-                    val_acc = 0
-                    for x, y in val_loader:
-                        x = x.to(self.model_config.device)
-                        y = y.to(self.model_config.device)
-                        pred = self.model(x)
-                        loss = self.criterion(pred, y)
-                        pred_ = pred.cpu()
-                        y_ = y.cpu()
-                        acc_ = metric(pred_, y_)
-                        val_loss += loss.item()
-                        val_acc += acc_
+            self.model.eval()
+            val_loss = 0
+            val_acc = 0
+            with torch.no_grad():
+                for x, y in val_loader:
+                    x = x.to(self.model_config.device)
+                    y = y.to(self.model_config.device)
+                    pred = self.model(x)
+                    loss = self.criterion(pred, y)
+                    pred_ = pred.cpu()
+                    y_ = y.cpu()
+                    acc_ = metric(pred_, y_)
+                    val_loss += loss.item()
+                    val_acc += acc_
 
-                if epoch % 10 == 0:
-                    print(
-                        f'Epoch: {epoch}, '
-                        f'Validation Accuracy: {val_acc / len(val_loader): .4f},'
-                        f'Validation Loss: {val_loss / len(val_loader):.4f}'
-                    )
-                    print('############################################################################')
+            val_loss /= len(val_loader)
+            val_acc /= len(val_loader)
 
-                v_loss = val_loss/len(val_loader)
-                loss_list.append(v_loss)
-                best_loss = min(loss_list)
+            if epoch % 10 == 0:
+                print(
+                    f'Epoch: {epoch}, '
+                    f'Train Accuracy: {train_acc:.4f}, '
+                    f'Train Loss: {train_loss:.4f}, '
+                    f'Validation Accuracy: {val_acc:.4f}, '
+                    f'Validation Loss: {val_loss:.4f}'
+                )
+                print('############################################################################')
 
-                if v_loss > best_loss:
-                    early_stop_counter += 1
-                else:
-                    early_stop_counter = 0
-                    torch.save(self.model.state_dict(), '../model/best_model.pt')
+            loss_list.append(val_loss)
+            best_loss = min(loss_list)
 
-                if early_stop_counter >= self.model_config.early_stop:
-                    break
+            if val_loss > best_loss:
+                early_stop_counter += 1
+            else:
+                early_stop_counter = 0
+                torch.save(self.model.state_dict(), '../model/best_model.pt')
+
+            if early_stop_counter >= self.model_config.early_stop:
+                print(f"Early stopping at epoch {epoch}")
+                break
+
+            self.scheduler.step()  # 학습률 스케줄러 업데이트
+
+        print("Training completed.")
 
     def predicate(self, X):
         model = torch.load('../model/best_model.pt', map_location=self.model_config.device)
