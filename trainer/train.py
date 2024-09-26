@@ -46,7 +46,7 @@ class ModelTrainer:
         loss_list = []
         early_stop_counter = 0
 
-        for epoch in range(100):
+        for epoch in range(self.model_config.epochs):
             self.model.train()
             train_loss = 0
             train_acc = 0
