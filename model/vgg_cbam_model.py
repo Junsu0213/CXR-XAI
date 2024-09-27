@@ -54,7 +54,6 @@ class CBAM(nn.Module):
         return output + x
 
 
-
 def conv_block(in_channels, out_channels):
     return nn.Sequential(nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=3, stride=1, padding=1),
                          nn.BatchNorm2d(out_channels),

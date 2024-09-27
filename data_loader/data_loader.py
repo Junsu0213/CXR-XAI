@@ -10,7 +10,7 @@ import torch
 import cv2
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
-from sklearn.model_selection import KFold, train_test_split
+from sklearn.model_selection import train_test_split, StratifiedKFold
 
 
 class ChestXRayDataset(Dataset):
@@ -67,7 +67,7 @@ class ChestXRayDataset(Dataset):
         # Covert to tensor
         image = torch.from_numpy(image).float().unsqueeze(0)
 
-        if self.transform:
+        if self.transform is not None:
             image = self.transform(image)
 
         return image, label
@@ -95,7 +95,7 @@ class ChestXRayDataset(Dataset):
             return image
 
     def get_k_fold_loaders(self, n_splits=5, batch_size=32, random_state=42):
-        kfold = KFold(n_splits=n_splits, shuffle=True, random_state=random_state)
+        kfold = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=random_state)
         fold_data_loaders = []
 
         for fold, (train_indices, val_indices) in enumerate(kfold.split(self)):
@@ -133,7 +133,6 @@ class ChestXRayDataset(Dataset):
 def get_integrated_data_loaders(data_config, split_method='k_fold', augment=True, **kwargs):
     # Basic transformation
     basic_transform = transforms.Compose([
-        transforms.ToTensor(),
         transforms.Normalize(mean=[0.5], std=[0.5])
     ])
 

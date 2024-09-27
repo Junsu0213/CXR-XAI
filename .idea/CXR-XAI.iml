@@ -4,7 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Remote Python 3.10.12 (sftp://junsupark0213@10.0.10.137:1423/mnt/nasw337n2/junsu_work/PycharmProjects/.virtualenvs/CXR-XAI/bin/python)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Remote Python 3.8.10 (sftp://wlsdud022@192.168.44.190:22/home/wlsdud022/junsu_work/PycharmProjects/.virtualenvs/CXR-XAI/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

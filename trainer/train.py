@@ -112,10 +112,12 @@ class ModelTrainer:
         print("Training completed.")
 
     def predicate(self, X):
-        model = torch.load('../model/best_model.pt', map_location=self.model_config.device)
+        self.model.load_state_dict(torch.load('../model/best_model.pt', weights_only=True, map_location=self.model_config.device))
+        self.model.to(self.model_config.device)  # 모델을 올바른 디바이스로 이동
+        self.model.eval()
         with torch.no_grad():
-            model.eval()
-            out = model(X)
+            X = X.to(self.model_config.device)  # 입력 데이터를 올바른 디바이스로 이동
+            out = self.model(X)
             out_ = out.cpu()
             prob = F.softmax(out_, dim=1)
             pred = torch.argmax(prob, dim=1)

@@ -12,7 +12,7 @@ class Covid19RadiographyDataConfig:
     """
     def __init__(
             self,
-            data_path='/mnt/nasw337n2/junsu_work/DATASET/COVID-CXR/COVID-19_Radiography_Dataset',
+            data_path='/home/wlsdud022/junsu_work/DATASET/COVID-CXR/COVID-19_Radiography_Dataset',
             label_list=None,
             label_map=None,
             data_select='segmented_images',
@@ -22,7 +22,7 @@ class Covid19RadiographyDataConfig:
     ):
 
         if label_list is None:
-            label_list = ['Normal', 'COVID', 'Lung_Opacity', 'Viral_Pneumonia']
+            label_list = ['Normal', 'COVID', 'Lung_Opacity', 'Viral Pneumonia']
         if label_map is None:
             label_map = {0: 'Normal', 1: 'COVID', 2: 'Lung_Opacity', 3: 'Viral Pneumonia'}
         if image_filtering is True:

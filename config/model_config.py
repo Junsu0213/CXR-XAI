@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 """
 Created on Thu. Sep. 26 10:07:11 2024
-@author: JUN-SU Park
+@author: JUN-SU PARK
 """
 
 
@@ -10,11 +10,11 @@ class ModelTrainerConfig:
             self,
             lr: float = 0.001,
             batch_size: int = 32,
-            epochs: int = 100,
-            early_stop: int = 80,
+            epochs: int = 30,
+            early_stop: int = 20,
             in_channels: int = 1,
             num_classes: int = 4,
-            device: str = 'cuda'
+            device: str = 'cuda:0'
     ):
         self.lr = lr
         self.batch_size = batch_size
