@@ -3,13 +3,13 @@
 Created on Thu. Sep. 26 16:10:20 2024
 @author: JUN-SU PARK
 """
+import cv2
+import numpy as np
 import torch
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
-import numpy as np
-from PIL import Image
-import cv2
 from torchvision import transforms
+from data_loader.data_loader import ChestXRayDataset
 
 
 class GradCAM:
@@ -49,44 +49,75 @@ class GradCAM:
         return heatmap.cpu().numpy()
 
 
-def visualize_gradcam(model, model_config, image_path, mask_path, target_class, target_layer):
-    # 이미지 로드 및 전처리
-    image = Image.open(image_path).convert('L')  # grayscale
-    transform = transforms.Compose([
-        transforms.Resize((256, 256)),
-        transforms.ToTensor(),
+def preprocess_image(image_path, mask_path, data_config):
+    # 이미지와 마스크 로드
+    image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
+
+    # 필터링 적용
+    image = ChestXRayDataset.filtering(image, **data_config.filter_config)
+
+    # 리사이즈
+    if data_config.resize is not None:
+        image = cv2.resize(image, (data_config.resize, data_config.resize))
+        mask = cv2.resize(mask, (data_config.resize, data_config.resize))
+
+    # 마스크 적용
+    image = np.where(mask > 0, image, 0)
+
+    # Covert to tensor
+    image_tensor = torch.from_numpy(image).float().unsqueeze(0)
+
+    # 텐서로 변환 및 정규화
+    basic_transform = transforms.Compose([
         transforms.Normalize(mean=[0.5], std=[0.5])
     ])
-    image_tensor = transform(image).unsqueeze(0)
+
+    image_tensor = basic_transform(image_tensor)
+
+    return image_tensor.unsqueeze(0), image
+
+
+def visualize_gradcam(model, model_config, data_config, image_path, mask_path, true_class, target_layer):
+
+    image_tensor, original_image = preprocess_image(image_path, mask_path, data_config)
+
+    # 모델 예측
+    model.eval()
+    with torch.no_grad():
+        X = image_tensor.to(model_config.device)
+        out = model(X)
+        out_ = out.cpu()
+        prob = torch.nn.functional.softmax(out_, dim=1)
+        predicted_class = torch.argmax(prob, dim=1)
 
     # Grad-CAM 생성
     grad_cam = GradCAM(model, target_layer)
-    heatmap = grad_cam.generate_cam(image_tensor.to(model_config.device), target_class)
+    heatmap = grad_cam.generate_cam(image_tensor.to(model_config.device), predicted_class)
 
-    # 원본 이미지와 히트맵 결합
-    image_np = np.array(image)
-    heatmap = cv2.resize(heatmap, (image_np.shape[1], image_np.shape[0]))
-    heatmap = np.uint8(255 * heatmap)
-    heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+    heatmap = cv2.resize(heatmap, (data_config.resize, data_config.resize))
 
-    # 이미지를 3채널로 변환
-    image_rgb = cv2.cvtColor(image_np, cv2.COLOR_GRAY2RGB)
+    heatmap_color = cv2.applyColorMap(np.uint8(255 * heatmap), cv2.COLORMAP_JET)
 
-    # 이미지와 히트맵의 값 범위를 0-255로 맞춤
-    image_rgb = cv2.normalize(image_rgb, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8U)
+    original_image_rgb = cv2.cvtColor(original_image, cv2.COLOR_GRAY2RGB)
 
-    superimposed_img = cv2.addWeighted(image_rgb, 0.6, heatmap, 0.4, 0)
+    superimposed_img = cv2.addWeighted(original_image_rgb, 0.6, heatmap_color, 0.4, 0)
+
+    # 클래스 이름 설정
+    class_names = data_config.label_list
+    predicted_name = class_names[predicted_class]
+    true_name = class_names[true_class]
 
     # 시각화
     plt.figure(figsize=(12, 4))
     plt.subplot(131)
-    plt.imshow(image_np, cmap='gray')
-    plt.title('Original Image')
+    plt.imshow(original_image, cmap='gray')
+    plt.title(f'Original Image')
     plt.axis('off')
 
     plt.subplot(132)
-    plt.imshow(cv2.cvtColor(heatmap, cv2.COLOR_BGR2RGB))
-    plt.title('Grad-CAM Heatmap')
+    plt.imshow(heatmap, cmap='jet')
+    plt.title(f'Grad-CAM Heatmap')
     plt.axis('off')
 
     plt.subplot(133)
@@ -94,23 +125,11 @@ def visualize_gradcam(model, model_config, image_path, mask_path, target_class, 
     plt.title('Superimposed')
     plt.axis('off')
 
+    plt.suptitle(f'True: {true_name}, Predicted: {predicted_name}', fontsize=16)
     plt.tight_layout()
+
+    file_path = f'./results/grad_cam/{model_config.model_save_name}_{true_name}.png'
+    plt.savefig(file_path, dpi=300, bbox_inches='tight')
     plt.show()
-
-
-if __name__ == '__main__':
-    from model.vgg_cbam_model import VGG19
-    from config.model_config import ModelTrainerConfig
-
-    device = 'cuda:1'
-    model_config = ModelTrainerConfig(device=str(device))
-
-    model = VGG19(in_channels=1, out_channels=4).to(device)
-    model.load_state_dict(torch.load("../model/best_model.pt"))
-
-    target_layer = model.conv_block5[-2]
-
-    image_path = r'/home/wlsdud022/junsu_work/DATASET/COVID-CXR/COVID-19_Radiography_Dataset/grad_cam_test/COVID/COVID-27.png'
-    target_class = 0
-
-    visualize_gradcam(model, model_config, image_path, target_class, target_layer)
+    plt.close()
+    print(f"Grad cam saved to {file_path}")

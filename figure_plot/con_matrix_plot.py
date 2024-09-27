@@ -46,7 +46,7 @@ def plot_confusion_matrix(y_true, y_pred, classes, file_name):
 
     fig.tight_layout()
 
-    file_path = f'../results/con_matrix/{file_name}_confusion_matrix.png'
+    file_path = f'./results/con_matrix/{file_name}_confusion_matrix.png'
     plt.savefig(file_path, dpi=300, bbox_inches='tight')
     plt.show()
     plt.close(fig)

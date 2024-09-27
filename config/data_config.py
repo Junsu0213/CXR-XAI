@@ -12,7 +12,7 @@ class Covid19RadiographyDataConfig:
     """
     def __init__(
             self,
-            data_path='/home/wlsdud022/junsu_work/DATASET/COVID-CXR/COVID-19_Radiography_Dataset',
+            data_path='/mnt/nasw337n2/junsu_work/DATASET/COVID-CXR/COVID-19_Radiography_Dataset',
             label_list=None,
             label_map=None,
             data_select='segmented_images',

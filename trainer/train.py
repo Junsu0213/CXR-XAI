@@ -41,7 +41,7 @@ class ModelTrainer:
             train_loader = DataLoader(train_dataset, batch_size=self.model_config.batch_size, shuffle=True)
             val_loader = DataLoader(val_dataset, batch_size=self.model_config.batch_size, shuffle=True)
 
-        metric = torchmetrics.Accuracy(task='multiclass', num_classes=self.model_config.num_classes).to(
+        metric = torchmetrics.Accuracy(task='multiclass', num_classes=self.model_config.out_channels).to(
             self.model_config.device)
 
         loss_list = []
@@ -101,7 +101,7 @@ class ModelTrainer:
                 early_stop_counter += 1
             else:
                 early_stop_counter = 0
-                torch.save(self.model.state_dict(), f'../results/model_save/{self.model_config.model_name}_best_model.pt')
+                torch.save(self.model.state_dict(), f'./results/model_save/{self.model_config.model_save_name}_best_model.pt')
 
             if early_stop_counter >= self.model_config.early_stop:
                 print(f"Early stopping at epoch {epoch}")
@@ -112,7 +112,7 @@ class ModelTrainer:
         print("Training completed.")
 
     def predicate(self, X):
-        self.model.load_state_dict(torch.load(f'../results/model_save/{self.model_config.model_name}_best_model.pt', weights_only=True, map_location=self.model_config.device))
+        self.model.load_state_dict(torch.load(f'./results/model_save/{self.model_config.model_save_name}_best_model.pt', weights_only=True, map_location=self.model_config.device))
         self.model.to(self.model_config.device)
         self.model.eval()
         with torch.no_grad():
