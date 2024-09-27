@@ -139,11 +139,15 @@ if __name__ == '__main__':
 
     device = 'cuda:2'
 
+    filter_method = 'CLAHE'
+    model_name_ = 'VGG19'
+    model_name = f'{model_name_}({filter_method})'
+
     data_config = Covid19RadiographyDataConfig()
     model_config = ModelTrainerConfig(device=str(device))
 
     model = VGG19(in_channels=model_config.in_channels, out_channels=model_config.num_classes).to(model_config.device)
-    model.load_state_dict(torch.load("../model/best_model.pt", weights_only=True, map_location=model_config.device))
+    model.load_state_dict(torch.load(f"../results/model_save/{model_name}_best_model.pt", weights_only=True, map_location=model_config.device))
     model.to(model_config.device)
 
     target_class = 0

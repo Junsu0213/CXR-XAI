@@ -8,6 +8,7 @@ Created on Thu. Sep. 26 10:07:11 2024
 class ModelTrainerConfig:
     def __init__(
             self,
+            model_name: str = 'None',
             lr: float = 0.001,
             batch_size: int = 32,
             epochs: int = 30,
@@ -16,6 +17,7 @@ class ModelTrainerConfig:
             num_classes: int = 4,
             device: str = 'cuda:0'
     ):
+        self.model_name = model_name
         self.lr = lr
         self.batch_size = batch_size
         self.epochs = epochs

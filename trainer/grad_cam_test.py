@@ -9,11 +9,16 @@ from figure_plot.con_matrix_plot import plot_confusion_matrix
 
 import numpy as np
 import torch
-device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+device = 'cuda:1'
+filter_method = 'CLAHE'
+model_name_ = 'VGG19'
+model_name = f'{model_name_}({filter_method})'
 epochs = 20
 
 data_config = Covid19RadiographyDataConfig()
-train_config = ModelTrainerConfig(device=str(device), epochs=epochs)
+data_config.filter_config['method'] = filter_method
+
+train_config = ModelTrainerConfig(device=str(device), epochs=epochs, model_name=model_name)
 
 model = VGG19(in_channels=train_config.in_channels, out_channels=train_config.num_classes).to(train_config.device)
 model_trainer = ModelTrainer(model_config=train_config, model=model)

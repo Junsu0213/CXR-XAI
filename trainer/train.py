@@ -101,7 +101,7 @@ class ModelTrainer:
                 early_stop_counter += 1
             else:
                 early_stop_counter = 0
-                torch.save(self.model.state_dict(), '../model/best_model.pt')
+                torch.save(self.model.state_dict(), f'../results/model_save/{self.model_config.model_name}_best_model.pt')
 
             if early_stop_counter >= self.model_config.early_stop:
                 print(f"Early stopping at epoch {epoch}")
@@ -112,11 +112,11 @@ class ModelTrainer:
         print("Training completed.")
 
     def predicate(self, X):
-        self.model.load_state_dict(torch.load('../model/best_model.pt', weights_only=True, map_location=self.model_config.device))
-        self.model.to(self.model_config.device)  # 모델을 올바른 디바이스로 이동
+        self.model.load_state_dict(torch.load(f'../results/model_save/{self.model_config.model_name}_best_model.pt', weights_only=True, map_location=self.model_config.device))
+        self.model.to(self.model_config.device)
         self.model.eval()
         with torch.no_grad():
-            X = X.to(self.model_config.device)  # 입력 데이터를 올바른 디바이스로 이동
+            X = X.to(self.model_config.device)
             out = self.model(X)
             out_ = out.cpu()
             prob = F.softmax(out_, dim=1)
