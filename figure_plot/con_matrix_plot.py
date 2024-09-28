@@ -3,6 +3,7 @@
 Created on Fri. Sep. 27 10:52:30 2024
 @author: JUN-SU PARK
 """
+import wandb
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, accuracy_score, f1_score
@@ -51,3 +52,5 @@ def plot_confusion_matrix(y_true, y_pred, classes, file_name):
     plt.show()
     plt.close(fig)
     print(f"Confusion matrix saved to {file_path}")
+
+    wandb.log({"confusion_matrix": wandb.Image(file_path)})

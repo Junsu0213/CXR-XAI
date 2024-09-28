@@ -12,10 +12,12 @@ model_name = 'VGG19'
 model_save_name = f'{model_name}({filter_method})'
 
 data_config = Covid19RadiographyDataConfig()
+data_config.filter_config['method'] = filter_method
+
 model_config = ModelTrainerConfig(device=str(device), model_save_name=model_save_name)
 
-# best_model_path = f"./results/model_save/{model_save_name}_best_model.pt"
-best_model_path = f"./model/best_model.pt"
+best_model_path = f"./results/model_save/{model_save_name}_best_model.pt"
+# best_model_path = f"./model/best_model.pt"
 model = VGG19(in_channels=model_config.in_channels, out_channels=model_config.out_channels).to(model_config.device)
 model.load_state_dict(torch.load(best_model_path, weights_only=True, map_location=model_config.device))
 model.to(model_config.device)

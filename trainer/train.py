@@ -3,6 +3,7 @@
 Created on Mon. Sep. 23 10:23:01 2024
 @author: JUN-SU Park
 """
+import wandb
 import torch
 import torch.nn as nn
 import torchmetrics
@@ -85,6 +86,13 @@ class ModelTrainer:
 
             val_loss /= len(val_loader)
             val_acc /= len(val_loader)
+
+            wand.log({
+                'Train acc': train_acc,
+                'Train loss': train_loss,
+                'Validation acc': val_acc,
+                'Validation loss': val_loss
+            })
 
             if epoch % 10 == 0:
                 print(
