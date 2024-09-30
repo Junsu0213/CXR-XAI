@@ -4,13 +4,16 @@ from config.model_config import ModelTrainerConfig
 from trainer.train import ModelTrainer
 from data_loader.data_loader import get_integrated_data_loaders
 from model.vgg_cbam_model import VGG19
+from model.focal_loss import FocalLoss
 from figure_plot.con_matrix_plot import plot_confusion_matrix
 import numpy as np
 import wandb
 import torch
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 filter_list = ['GF', 'MF', 'LF', 'Canny', 'Origin', 'CLAHE', 'HE']
+loss = 'focal_loss'
+alpha = [0.1, 0.7, 0.1, 0.1]
 
 for filter_method in filter_list:
 
@@ -24,7 +27,7 @@ for filter_method in filter_list:
 
     wandb.init(
         project='CXR-XAI',
-        name=model_save_name,
+        name=f'{model_save_name}_{loss}',
         config={
             'learning_rate': model_config.lr,
             'batch_size': model_config.batch_size,
@@ -32,11 +35,14 @@ for filter_method in filter_list:
             'model': f'{model_name}_CBAM',
             'dataset': 'COVID-19_Radiography_Dataset',
             'filter': filter_method,
+            'loss': loss,
+            'Focal Loss Alpha': alpha,
         }
     )
 
     model = VGG19(in_channels=model_config.in_channels, out_channels=model_config.out_channels).to(device)
-    model_trainer = ModelTrainer(model_config=model_config, model=model)
+    criterion = FocalLoss(alpha=alpha)
+    model_trainer = ModelTrainer(model_config=model_config, model=model, criterion=criterion)
 
     train_loader, val_loader, test_loader = get_integrated_data_loaders(
         data_config,

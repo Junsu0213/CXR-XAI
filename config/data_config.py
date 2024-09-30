@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 """
 Created on Fri. Jul. 05 14:22:31 2024
-@author: JUN-SU Park
+@author: JUN-SU PARK
 """
 
 
@@ -12,7 +12,7 @@ class Covid19RadiographyDataConfig:
     """
     def __init__(
             self,
-            data_path='/mnt/nasw337n2/junsu_work/DATASET/COVID-CXR/COVID-19_Radiography_Dataset',
+            data_path='/home/wlsdud022/junsu_work/DATASET/COVID-CXR/COVID-19_Radiography_Dataset',
             label_list=None,
             label_map=None,
             data_select='segmented_images',

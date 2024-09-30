@@ -88,10 +88,10 @@ class ModelTrainer:
             val_acc /= len(val_loader)
 
             wandb.log({
-                'Train acc': train_acc,
-                'Train loss': train_loss,
-                'Validation acc': val_acc,
-                'Validation loss': val_loss
+                'Train acc (focal loss)': train_acc,
+                'Train loss (focal loss)': train_loss,
+                'Validation acc (focal loss)': val_acc,
+                'Validation loss (focal loss)': val_loss
             })
 
             if epoch % 10 == 0:
