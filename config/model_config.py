@@ -11,8 +11,8 @@ class ModelTrainerConfig:
             model_save_name: str = 'None',
             lr: float = 0.001,
             batch_size: int = 32,
-            epochs: int = 30,
-            early_stop: int = 20,
+            epochs: int = 20,
+            early_stop: int = 15,
             in_channels: int = 1,
             out_channels: int = 4,
             device: str = 'cuda'

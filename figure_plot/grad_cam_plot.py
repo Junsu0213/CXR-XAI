@@ -4,6 +4,7 @@ Created on Thu. Sep. 26 16:10:20 2024
 @author: JUN-SU PARK
 """
 import cv2
+import wandb
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -129,7 +130,9 @@ def visualize_gradcam(model, model_config, data_config, image_path, mask_path, t
     plt.tight_layout()
 
     file_path = f'./results/grad_cam/{model_config.model_save_name}_{true_name}.png'
-    plt.savefig(file_path, dpi=300, bbox_inches='tight')
+    plt.savefig(file_path, dpi=100, bbox_inches='tight')
     plt.show()
     plt.close()
     print(f"Grad cam saved to {file_path}")
+
+    wandb.log({'grad cam': wandb.Image(file_path)})

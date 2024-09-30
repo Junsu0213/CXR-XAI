@@ -87,7 +87,7 @@ class ModelTrainer:
             val_loss /= len(val_loader)
             val_acc /= len(val_loader)
 
-            wand.log({
+            wandb.log({
                 'Train acc': train_acc,
                 'Train loss': train_loss,
                 'Validation acc': val_acc,

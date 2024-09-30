@@ -10,7 +10,7 @@ import wandb
 import torch
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-filter_list = ['Origin', 'CLAHE', 'HE', 'GF', 'MF', 'LF', 'Canny']
+filter_list = ['GF', 'MF', 'LF', 'Canny', 'Origin', 'CLAHE', 'HE']
 
 for filter_method in filter_list:
 
@@ -64,3 +64,5 @@ for filter_method in filter_list:
 
     # Confusion Matrix 시각화
     plot_confusion_matrix(all_labels, all_preds, data_config.label_list, file_name=model_save_name)
+
+    wandb.finish()
