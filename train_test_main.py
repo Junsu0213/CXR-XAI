@@ -13,7 +13,7 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 filter_list = ['GF', 'MF', 'LF', 'Canny', 'Origin', 'CLAHE', 'HE']
 loss = 'focal_loss'
-alpha = [0.1, 0.7, 0.1, 0.1]
+alpha = [0.2, 0.4, 0.3, 0.1]
 
 for filter_method in filter_list:
 
@@ -27,7 +27,7 @@ for filter_method in filter_list:
 
     wandb.init(
         project='CXR-XAI',
-        name=f'{model_save_name}_{loss}',
+        name=f'{model_save_name}_{loss}_ver.2',
         config={
             'learning_rate': model_config.lr,
             'batch_size': model_config.batch_size,
@@ -46,6 +46,7 @@ for filter_method in filter_list:
 
     train_loader, val_loader, test_loader = get_integrated_data_loaders(
         data_config,
+        model_config,
         split_method='train_val_test',
         agment=True
     )

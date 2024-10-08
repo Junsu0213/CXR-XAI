@@ -135,4 +135,4 @@ def visualize_gradcam(model, model_config, data_config, image_path, mask_path, t
     plt.close()
     print(f"Grad cam saved to {file_path}")
 
-    wandb.log({'grad cam': wandb.Image(file_path)})
+    # wandb.log({'grad cam': wandb.Image(file_path)})

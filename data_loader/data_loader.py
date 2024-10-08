@@ -98,7 +98,11 @@ class ChestXRayDataset(Dataset):
         kfold = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=random_state)
         fold_data_loaders = []
 
-        for fold, (train_indices, val_indices) in enumerate(kfold.split(self)):
+        # 전체 데이터셋의 인덱스와 라벨 생성
+        indices = np.arange(len(self))
+        labels = np.array(self.labels)
+
+        for fold, (train_indices, val_indices) in enumerate(kfold.split(indices, labels)):
             train_sampler = torch.utils.data.SubsetRandomSampler(train_indices)
             val_sampler = torch.utils.data.SubsetRandomSampler(val_indices)
 
@@ -130,7 +134,7 @@ class ChestXRayDataset(Dataset):
         return train_loader, val_loader, test_loader
 
 
-def get_integrated_data_loaders(data_config, split_method='k_fold', augment=True, **kwargs):
+def get_integrated_data_loaders(data_config, model_config, split_method='k_fold', augment=True, **kwargs):
     # Basic transformation
     basic_transform = transforms.Compose([
         transforms.Normalize(mean=[0.5], std=[0.5])
@@ -150,12 +154,12 @@ def get_integrated_data_loaders(data_config, split_method='k_fold', augment=True
 
     if split_method == 'k_fold':
         return dataset.get_k_fold_loaders(n_splits=kwargs.get('n_splits', 10),
-                                          batch_size=kwargs.get('batch_size', 32),
+                                          batch_size=kwargs.get('batch_size', model_config.batch_size),
                                           random_state=kwargs.get('random_state', 42))
     elif split_method == 'train_val_test':
         return dataset.get_train_val_test_loaders(test_size=kwargs.get('test_size', 0.2),
                                                   val_size=kwargs.get('val_size', 0.2),
-                                                  batch_size=kwargs.get('batch_size', 32),
+                                                  batch_size=kwargs.get('batch_size', model_config.batch_size),
                                                   random_state=kwargs.get('random_state', 42))
     else:
         raise ValueError("Invalid split_method. Choose 'k_fold' or 'train_val_test'.")
