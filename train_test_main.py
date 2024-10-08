@@ -46,9 +46,9 @@ for filter_method in filter_list:
 
     train_loader, val_loader, test_loader = get_integrated_data_loaders(
         data_config,
-        model_config,
         split_method='train_val_test',
-        agment=True
+        agment=True,
+        batch_size=model_config.batch_size,
     )
 
     print("\nTrain/Val/Test Split:")

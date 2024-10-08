@@ -40,7 +40,13 @@ for filter_method in filter_list:
     all_folds_labels = []
 
     # K-fold cross validation with augmentation
-    fold_loaders = get_integrated_data_loaders(data_config=data_config, model_config=model_config, split_method='k_fold', augment=True)
+    fold_loaders = get_integrated_data_loaders(
+        data_config,
+        split_method='k_fold',
+        augment=True,
+        batch_size=model_config.batch_size,
+        n_splits=10,
+    )
     for i, (train_loader, val_loader) in enumerate(fold_loaders):
 
         wandb.init(

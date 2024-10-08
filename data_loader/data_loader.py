@@ -134,7 +134,7 @@ class ChestXRayDataset(Dataset):
         return train_loader, val_loader, test_loader
 
 
-def get_integrated_data_loaders(data_config, model_config, split_method='k_fold', augment=True, **kwargs):
+def get_integrated_data_loaders(data_config, split_method='k_fold', augment=True, **kwargs):
     # Basic transformation
     basic_transform = transforms.Compose([
         transforms.Normalize(mean=[0.5], std=[0.5])
@@ -154,12 +154,12 @@ def get_integrated_data_loaders(data_config, model_config, split_method='k_fold'
 
     if split_method == 'k_fold':
         return dataset.get_k_fold_loaders(n_splits=kwargs.get('n_splits', 10),
-                                          batch_size=kwargs.get('batch_size', model_config.batch_size),
+                                          batch_size=kwargs.get('batch_size', 32),
                                           random_state=kwargs.get('random_state', 42))
     elif split_method == 'train_val_test':
         return dataset.get_train_val_test_loaders(test_size=kwargs.get('test_size', 0.2),
                                                   val_size=kwargs.get('val_size', 0.2),
-                                                  batch_size=kwargs.get('batch_size', model_config.batch_size),
+                                                  batch_size=kwargs.get('batch_size', 32),
                                                   random_state=kwargs.get('random_state', 42))
     else:
         raise ValueError("Invalid split_method. Choose 'k_fold' or 'train_val_test'.")
