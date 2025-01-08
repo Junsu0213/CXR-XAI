@@ -1,60 +1,60 @@
-# CXR-XAI: Chest X-Ray Explainable AI
+# COVID-19 Radiography Classification and Visualization
 
-## Project Description
+This project aims to build a deep learning model for classifying and visualizing COVID-19 radiography images. It utilizes the VGG19 model with a Convolutional Block Attention Module (CBAM) to extract features from images and employs Grad-CAM for visualizing model predictions.
 
-This research project aims to develop an advanced system for analyzing chest X-ray images to detect COVID-19 and other related lung conditions using artificial intelligence techniques. The project combines state-of-the-art image processing, deep learning classification, and explainable AI methodologies to create a comprehensive solution for medical professionals.
+## Key Features
+- Classification of COVID-19 radiography images
+- Visualization of model predictions using Grad-CAM
+- Application of various image filtering techniques
+- Model evaluation through K-fold cross-validation
+- Experiment tracking with Weights & Biases
 
-### Key Objectives:
+## Installation and Setup
+### Requirements
+- Python 3.x
+- PyTorch
+- torchvision
+- wandb
+- numpy
+- matplotlib
+- opencv-python
 
-1. Develop an accurate classification model for identifying COVID-19, normal cases, viral pneumonia, and lung opacity from chest X-ray images.
-2. Implement explainable AI techniques to provide interpretable results, enhancing trust and understanding in the model's decisions.
-3. Generate automated medical reports based on the classification results and explainable AI insights.
+1. Clone this repository:
+    ```bash
+    git clone https://github.com/yourusername/COVID19-Radiography-Project.git
+    cd COVID19-Radiography-Project
+    ```
 
-### Methodology:
+2. Set up and activate a virtual environment:
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+    ```
 
-The project follows a three-step approach:
-
-1. **Preprocessing**: 
-   - Apply various image filtering techniques to enhance image quality.
-   - Perform lung segmentation using U-Net to focus on the relevant areas of the X-ray.
-
-2. **Classification and Evaluation**: 
-   - Utilize deep learning models with attention mechanisms (e.g., CBAM) for accurate classification.
-   - Implement explainable AI techniques to visualize and interpret the model's decision-making process.
-
-3. **LLM-based Medical Report Generation**: 
-   - Leverage Large Language Models (LLMs) to automatically generate detailed medical reports.
-   - Incorporate classification results and XAI insights into the report generation process.
-
-### Dataset:
-
-The project uses the COVID-19 Radiography Database, a multi-center dataset containing 21,164 chest X-ray images across four categories: COVID-19, Normal, Viral Pneumonia, and Lung Opacity.
-
-### Expected Outcomes:
-
-- A robust and interpretable AI model for COVID-19 and related lung condition detection from chest X-rays.
-- An automated system for generating comprehensive medical reports based on X-ray analysis.
-- Improved diagnostic support for medical professionals, potentially leading to faster and more accurate diagnoses.
-
-This research contributes to the ongoing efforts in combating COVID-19 and improving medical imaging analysis through the application of cutting-edge AI technologies.
-
-## Installation
-
-[Provide installation instructions here]
+3. Install the required packages:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 ## Usage
+1. Run `train_test_main.py` to train the model:
+    ```bash
+    python train_test_main.py
+    ```
 
-[Provide usage instructions here]
+2. Run `grad_cam_plot_main.py` to perform Grad-CAM visualization:
+    ```bash
+    python grad_cam_plot_main.py
+    ```
 
-## Contributing
+3. Run `kfold_main.py` to perform K-fold cross-validation:
+    ```bash
+    python kfold_main.py
+    ```
 
-[Provide information on how others can contribute to this project]
+## Contributors
+- **JUN-SU PARK**
+  - Email: junsupark0213@korea.ac.kr
 
 ## License
-
-[Specify the license under which this project is released]
-
-## Contact
-
-[Provide contact information for the project maintainer(s)]
-
+This project is licensed under the MIT License. See the LICENSE file for details. 

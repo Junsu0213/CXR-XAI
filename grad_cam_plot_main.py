@@ -37,19 +37,21 @@ for filter_method in filter_list:
         target_layer = model.conv_block3[-2]  # CBAM 이전의 마지막 컨볼루션 레이어
         print(target_layer)
 
-        # wandb.init(
-        #     project='CXR-XAI',
-        #     name=f'{model_save_name}_grad_cam_{disease_name}',
-        #     config={
-        #         'learning_rate': model_config.lr,
-        #         'batch_size': model_config.batch_size,
-        #         'epochs': model_config.epochs,
-        #         'model': f'{model_name}_CBAM',
-        #         'dataset': 'COVID-19_Radiography_Dataset',
-        #         'filter': filter_method,
-        #     }
-        # )
+        wandb.init(
+            project='CXR-XAI',
+            name=f'{model_save_name}_grad_cam_{disease_name}',
+            config={
+                'learning_rate': model_config.lr,
+                'batch_size': model_config.batch_size,
+                'epochs': model_config.epochs,
+                'model': f'{model_name}_CBAM',
+                'dataset': 'COVID-19_Radiography_Dataset',
+                'filter': filter_method,
+            }
+        )
 
         visualize_gradcam(model, model_config, data_config, image_path, mask_path, target_class, target_layer)
+
+        wandb.log({'grad cam': wandb.Image(image_path)})
 
         wandb.finish()
